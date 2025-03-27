@@ -1,15 +1,14 @@
 default: build
 
-build-download:
-	@echo "Building download..."
+build-downloader:
+	@echo "Building downloader..."
+	go build -o bin/downloader cmd/downloader/main.go
 
 build-search:
-	@ehco "Building search..."
+	@echo "Building search..."
 
-build:
-	@echo "Building..."
-	build-download
-	build-search
+build: build-downloader build-search
 
 test:
 	@echo "Running tests..."
+	go test -v .\internal\dataset\
