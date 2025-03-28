@@ -2,9 +2,9 @@ package downloader
 
 import (
 	"archive/zip"
-	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 func ExtractAllFiles(archivePath string, destination string) error {
@@ -19,12 +19,17 @@ func ExtractAllFiles(archivePath string, destination string) error {
 			continue
 		}
 
+		targetFile := filepath.Join(destination, file.Name)
+		if err := os.MkdirAll(filepath.Dir(targetFile), os.ModePerm); err != nil {
+			return err
+		}
+
 		src, err := file.Open()
 		if err != nil {
 			return err
 		}
 
-		dstFile, err := os.OpenFile(fmt.Sprintf("%s/%s", destination, file.Name), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
+		dstFile, err := os.OpenFile(targetFile, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
 		if err != nil {
 			return err
 		}

@@ -61,3 +61,11 @@ func (d *Dataset) ToTarget() string {
 
 	return fmt.Sprintf("ctl00$body$B%s%sPobierz", d.Name, d.VariantName())
 }
+
+func (d *Dataset) Id() string {
+	if d.Name == "WMRODZ" {
+		return d.Name
+	}
+
+	return fmt.Sprintf("%s-%s", d.Name, d.Variant)
+}
