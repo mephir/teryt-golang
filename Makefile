@@ -12,3 +12,7 @@ build: build-downloader build-search
 test:
 	@echo "Running tests..."
 	go test -v .\internal\dataset\
+
+clean:
+	@echo "Cleaning..."
+	rm -rf bin
