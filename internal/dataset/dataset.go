@@ -11,34 +11,34 @@ type Dataset struct {
 	Variant string
 }
 
+var Datasets = []Dataset{
+	{"TERC", "U"},
+	{"TERC", "A"},
+	{"SIMC", "U"},
+	{"SIMC", "A"},
+	{"SIMC", "S"},
+	{"ULIC", "U"},
+	{"ULIC", "A"},
+	{"WMRODZ", ""},
+}
+
+var variants = map[string]string{
+	"U": "Urzedowy",
+	"A": "Adresowy",
+	"S": "Statystyczny",
+}
+
 func (d *Dataset) Validate() error {
-	datasets := map[string][]string{
-		"TERC":   {"U", "A"},
-		"SIMC":   {"U", "A", "S"},
-		"ULIC":   {"U", "A"},
-		"WMRODZ": {""},
-	}
-
-	if _, ok := datasets[d.Name]; !ok {
-		return fmt.Errorf("invalid dataset name")
-	}
-
-	for _, variant := range datasets[d.Name] {
-		if variant == d.Variant {
+	for _, dataset := range Datasets {
+		if d.Name == dataset.Name && d.Variant == dataset.Variant {
 			return nil
 		}
 	}
 
-	return fmt.Errorf("invalid dataset variant")
+	return fmt.Errorf("invalid dataset")
 }
 
 func (d *Dataset) VariantName() string {
-	variants := map[string]string{
-		"U": "Urzedowy",
-		"A": "Adresowy",
-		"S": "Statystyczny",
-	}
-
 	return variants[d.Variant]
 }
 
@@ -50,8 +50,8 @@ func (d *Dataset) ToString() string {
 	return fmt.Sprintf("%s %s", d.Name, d.VariantName())
 }
 
-func (d *Dataset) ToFilename() string {
-	return strings.ReplaceAll(fmt.Sprintf("%s_%s.zip", d.ToString(), time.Now().Local().Format("2006-01-02")), " ", "_")
+func (d *Dataset) ToFilename(date time.Time) string {
+	return fmt.Sprintf("%s_%s.zip", strings.ReplaceAll(d.ToString(), " ", "_"), date.Format("2006-01-02"))
 }
 
 func (d *Dataset) ToTarget() string {

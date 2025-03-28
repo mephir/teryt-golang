@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 	"regexp"
 	"time"
 
 	"github.com/mephir/teryt-golang/internal/dataset"
 
 	"github.com/carlmjohnson/requests"
+	"github.com/gabriel-vasile/mimetype"
 )
 
 type viewstate struct {
@@ -103,6 +105,19 @@ func DownloadDataset(dataset dataset.Dataset, outputPath string) error {
 
 	if err != nil {
 		return err
+	}
+
+	// this check is necessary due page does not always return clear http status code when download fails
+	// so we need to check if file is valid zip
+	mimetype.SetLimit(32) // zip requires only 8 bytes to detect, but we need to read more to detect other types
+	mime, err := mimetype.DetectFile(outputPath)
+	if err != nil {
+		return fmt.Errorf("could not detect mimetype: %w", err)
+	}
+
+	if !mime.Is("application/zip") {
+		os.Remove(outputPath)
+		return fmt.Errorf("invalid mimetype: %s", mime.String())
 	}
 
 	return nil

@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 
 	"github.com/mephir/teryt-golang/internal/dataset"
 	"github.com/mephir/teryt-golang/internal/downloader"
 )
 
 func extract_file(dataset dataset.Dataset) error {
-	archive, err := zip.OpenReader(dataset.ToFilename())
+	archive, err := zip.OpenReader(dataset.ToFilename(time.Now().Local()))
 	if err != nil {
 		return err
 	}
@@ -51,7 +52,7 @@ func main() {
 	dataset := dataset.Dataset{Name: "SIMC", Variant: "A"}
 
 	fmt.Println("Downloading file")
-	err := downloader.DownloadDataset(dataset, dataset.ToFilename())
+	err := downloader.DownloadDataset(dataset, dataset.ToFilename(time.Now().Local()))
 	if err != nil {
 		panic(err)
 	}
