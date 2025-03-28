@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func ExtractAllFiles(archivePath string, destination string) error {
+func ExtractFiles(archivePath string, destination string, filterExtension string) error {
 	archive, err := zip.OpenReader(archivePath)
 	if err != nil {
 		return err
@@ -16,6 +16,10 @@ func ExtractAllFiles(archivePath string, destination string) error {
 
 	for _, file := range archive.File {
 		if file.FileInfo().IsDir() {
+			continue
+		}
+
+		if (filterExtension != "") && (filepath.Ext(file.Name) != filterExtension) {
 			continue
 		}
 

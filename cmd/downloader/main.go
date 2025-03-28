@@ -71,6 +71,8 @@ var extractFlag bool
 var timeoutFlag int
 var userAgentFlag string
 var dateFlag string
+var xmlOnlyFlag bool
+var csvOnlyFlag bool
 
 func init() {
 	flag.Var(&datasetsFlag, "datasets", "Comma separated list of datasets")
@@ -85,6 +87,8 @@ func init() {
 	flag.IntVar(&timeoutFlag, "timeout", 10, "HTTP client timeout in seconds")
 	flag.StringVar(&userAgentFlag, "user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:136.0) Gecko/20100101 Firefox/136.0", "HTTP client User agent")
 	flag.StringVar(&dateFlag, "date", "today", "Date of the dataset format: YYYY-MM-DD")
+	flag.BoolVar(&xmlOnlyFlag, "xml-only", false, "Extract only XML files")
+	flag.BoolVar(&csvOnlyFlag, "csv-only", false, "Extract only CSV files")
 }
 
 func main() {
@@ -108,6 +112,16 @@ func main() {
 		os.Exit(2)
 	}
 
+	if (xmlOnlyFlag || csvOnlyFlag) && !extractFlag {
+		fmt.Fprintln(os.Stderr, "xml-only and csv-only flags require extract flag")
+		os.Exit(2)
+	}
+
+	if xmlOnlyFlag && csvOnlyFlag {
+		fmt.Fprintln(os.Stderr, "xml-only and csv-only flags are mutually exclusive")
+		os.Exit(2)
+	}
+
 	var date time.Time
 	if dateFlag == "today" {
 		date = time.Now().Local()
@@ -128,7 +142,14 @@ func main() {
 
 		if extractFlag {
 			fmt.Printf("Extracting %s...\n", ds.ToFilename(date))
-			downloader.ExtractAllFiles(filepath, outputDirFlag)
+
+			if xmlOnlyFlag {
+				downloader.ExtractFiles(filepath, outputDirFlag, ".xml")
+			} else if csvOnlyFlag {
+				downloader.ExtractFiles(filepath, outputDirFlag, ".csv")
+			} else {
+				downloader.ExtractFiles(filepath, outputDirFlag, "")
+			}
 		}
 	}
 }

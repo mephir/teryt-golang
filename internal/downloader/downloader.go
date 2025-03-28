@@ -78,11 +78,14 @@ func tbdate(date time.Time) string {
 	return fmt.Sprintf("%d %s %d", day, months[int(month)], year)
 }
 
+var viewstateCache viewstate
+
 func DownloadDataset(dataset dataset.Dataset, outputPath string) error {
-	state := viewstate{}
-	err := state.Fetch()
-	if err != nil {
-		return err
+	if viewstateCache.__VIEWSTATE == "" {
+		err := viewstateCache.Fetch()
+		if err != nil {
+			return err
+		}
 	}
 
 	client := *http.DefaultClient
@@ -90,12 +93,12 @@ func DownloadDataset(dataset dataset.Dataset, outputPath string) error {
 	client.Timeout = 10 * time.Second
 
 	form := url.Values{}
-	form.Add("__VIEWSTATE", state.__VIEWSTATE)
-	form.Add("__VIEWSTATEGENERATOR", state.__VIEWSTATEGENERATOR)
+	form.Add("__VIEWSTATE", viewstateCache.__VIEWSTATE)
+	form.Add("__VIEWSTATEGENERATOR", viewstateCache.__VIEWSTATEGENERATOR)
 	form.Add("__EVENTTARGET", dataset.ToTarget())
 	form.Add("ctl00$body$TBData", tbdate(time.Now().Local()))
 
-	err = requests.
+	err := requests.
 		URL("https://eteryt.stat.gov.pl/eTeryt/rejestr_teryt/udostepnianie_danych/baza_teryt/uzytkownicy_indywidualni/pobieranie/pliki_pelne.aspx?contrast=default").
 		Client(&client).
 		UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:136.0) Gecko/20100101 Firefox/136.0").
