@@ -32,6 +32,9 @@ This project is in the early development phase. The initial focus is on implemen
 - [ ] Design and prototype vector search algorithms
 - [ ] Optimize search performance and indexing
 
+## Usage of Downloaded Data
+The official source for downloading and licensing of TERYT data can be found here: [eTERYT - Pobieranie danych](https://eteryt.stat.gov.pl/eTeryt/rejestr_teryt/udostepnianie_danych/baza_teryt/uzytkownicy_indywidualni/pobieranie/pobieranie.aspx?contrast=default)
+
 ## Contribution
 Currently, this is a personal learning project, but contributions and discussions are welcome! If you have insights or suggestions on vector search implementations, feel free to reach out.
 
