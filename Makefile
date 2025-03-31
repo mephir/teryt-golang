@@ -4,11 +4,11 @@ build-downloader:
 	@echo "Building downloader..."
 	go build -o bin/downloader cmd/downloader/main.go
 
-build-conv:
-	@echo "Building converter..."
-	go build -o bin/conv cmd/conv/main.go
+build-exporter:
+	@echo "Building exporter..."
+	go build -o bin/exporter cmd/exporter/main.go
 
-build: build-downloader build-conv
+build: build-downloader build-exporter
 
 test:
 	@echo "Running tests..."
