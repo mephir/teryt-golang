@@ -26,11 +26,13 @@ This project is in the early development phase. The initial focus is on implemen
 
 ## Roadmap
 - [X] Implement automated TERYT data retrieval
-- [ ] Develop parsing logic for XML/CSV formats
-- [ ] Support multiple data export formats (JSON, SQL, CSV)
+- [ ] Develop parsing logic for XML formats
+- [ ] Support multiple data export formats (JSON, SQL, CSV etc)
 - [ ] Implement basic database import functionality
 - [ ] Design and prototype vector search algorithms
 - [ ] Optimize search performance and indexing
+- [ ] Contenerize application
+- [ ] Github Actions
 
 ## Usage of Downloaded Data
 The official source for downloading and licensing of TERYT data can be found here: [eTERYT - Pobieranie danych](https://eteryt.stat.gov.pl/eTeryt/rejestr_teryt/udostepnianie_danych/baza_teryt/uzytkownicy_indywidualni/pobieranie/pobieranie.aspx?contrast=default)
