@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ULIC>
+  <catalog name="ULIC" type="ALL" date="2025-03-31">
+    <row>
+      <WOJ>02</WOJ>
+      <POW>10</POW>
+      <GMI>02</GMI>
+      <RODZ_GMI>1</RODZ_GMI>
+      <SYM>0936457</SYM>
+      <SYM_UL>18821</SYM_UL>
+      <CECHA>ul.</CECHA>
+      <NAZWA_1>Rolnicza</NAZWA_1>
+      <NAZWA_2 />
+      <STAN_NA>2025-03-31</STAN_NA>
+    </row>
+  </catalog>
+</ULIC>

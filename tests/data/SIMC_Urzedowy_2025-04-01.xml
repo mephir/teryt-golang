@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SIMC>
+  <catalog name="SIMC" type="ALL" date="2025-01-01">
+    <row>
+      <WOJ>02</WOJ>
+      <POW>24</POW>
+      <GMI>04</GMI>
+      <RODZ_GMI>2</RODZ_GMI>
+      <RM>01</RM>
+      <MZ>1</MZ>
+      <NAZWA>Rudnica</NAZWA>
+      <SYM>0855492</SYM>
+      <SYMPOD>0855492</SYMPOD>
+      <STAN_NA>2025-01-01</STAN_NA>
+    </row>
+  </catalog>
+</SIMC>

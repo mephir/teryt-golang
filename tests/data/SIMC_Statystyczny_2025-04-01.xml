@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SIMC>
+  <catalog name="SIMC" type="ALL" date="2025-01-01">
+    <row>
+      <WOJ>02</WOJ>
+      <POW>08</POW>
+      <GMI>10</GMI>
+      <RODZ_GMI>5</RODZ_GMI>
+      <RM>01</RM>
+      <MZ>1</MZ>
+      <NMST>08</NMST>
+      <NMSK>001</NMSK>
+      <SYMBM>0</SYMBM>
+      <SYMSTAT>0853748</SYMSTAT>
+      <NAZWA>Jaworek</NAZWA>
+      <SYM>0853748</SYM>
+      <SYMPOD>0853748</SYMPOD>
+      <STAN_NA>2025-01-01</STAN_NA>
+    </row>
+  </catalog>
+</SIMC>

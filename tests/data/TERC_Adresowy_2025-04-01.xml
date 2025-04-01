@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<teryt>
+  <catalog name="TERC" type="ALL" date="2025-01-01">
+    <row>
+      <WOJ>02</WOJ>
+      <POW />
+      <GMI />
+      <RODZ />
+      <NAZWA>DOLNOŚLĄSKIE</NAZWA>
+      <NAZWA_DOD>województwo</NAZWA_DOD>
+      <STAN_NA>2025-01-01</STAN_NA>
+    </row>
+  </catalog>
+</teryt>

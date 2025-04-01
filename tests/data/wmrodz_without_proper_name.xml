@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SIMC>
+  <catalog name="SIMC" type="ALL" date="2013-02-28">
+    <row>
+      <RM>00</RM>
+      <NAZWA_RM>część</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>01</RM>
+      <NAZWA_RM>wieś</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>02</RM>
+      <NAZWA_RM>kolonia</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>03</RM>
+      <NAZWA_RM>przysiółek</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>04</RM>
+      <NAZWA_RM>osada</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>05</RM>
+      <NAZWA_RM>osada leśna</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>06</RM>
+      <NAZWA_RM>osiedle</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>07</RM>
+      <NAZWA_RM>schronisko turystyczne</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>95</RM>
+      <NAZWA_RM>dzielnica</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>96</RM>
+      <NAZWA_RM>miasto</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>98</RM>
+      <NAZWA_RM>delegatura</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+    <row>
+      <RM>99</RM>
+      <NAZWA_RM>część miasta</NAZWA_RM>
+      <STAN_NA>2013-02-28</STAN_NA>
+    </row>
+  </catalog>
+</SIMC>
