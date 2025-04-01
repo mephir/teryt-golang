@@ -75,7 +75,7 @@ func tbdate(date time.Time) string {
 
 	year, month, day := date.Date()
 
-	return fmt.Sprintf("%d %s %d", day, months[int(month)], year)
+	return fmt.Sprintf("%02d %s %d", day, months[int(month)], year)
 }
 
 var viewstateCache viewstate
