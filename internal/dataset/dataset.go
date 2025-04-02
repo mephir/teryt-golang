@@ -9,17 +9,19 @@ import (
 type Dataset struct {
 	Name    string
 	Variant string
+	Date    time.Time
 }
 
-var Datasets = []Dataset{
-	{"TERC", "U"},
-	{"TERC", "A"},
-	{"SIMC", "U"},
-	{"SIMC", "A"},
-	{"SIMC", "S"},
-	{"ULIC", "U"},
-	{"ULIC", "A"},
-	{"WMRODZ", ""},
+// DefaultDatasets is a list of default datasets that can be downloaded
+var DefaultDatasets = []Dataset{
+	{"TERC", "U", time.Time{}},
+	{"TERC", "A", time.Time{}},
+	{"SIMC", "U", time.Time{}},
+	{"SIMC", "A", time.Time{}},
+	{"SIMC", "S", time.Time{}},
+	{"ULIC", "U", time.Time{}},
+	{"ULIC", "A", time.Time{}},
+	{"WMRODZ", "", time.Time{}},
 }
 
 var variants = map[string]string{
@@ -29,7 +31,7 @@ var variants = map[string]string{
 }
 
 func (d *Dataset) Validate() error {
-	for _, dataset := range Datasets {
+	for _, dataset := range DefaultDatasets {
 		if d.Name == dataset.Name && d.Variant == dataset.Variant {
 			return nil
 		}

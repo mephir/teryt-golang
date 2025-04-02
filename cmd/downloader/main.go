@@ -12,7 +12,7 @@ import (
 	"github.com/mephir/teryt-golang/internal/downloader"
 )
 
-type datasets []dataset.Dataset
+type datasets dataset.Collection
 
 func (d *datasets) String() string {
 	return fmt.Sprint(*d)
@@ -20,7 +20,7 @@ func (d *datasets) String() string {
 
 func (d *datasets) Set(value string) error {
 	if strings.ToLower(value) == "all" {
-		*d = dataset.Datasets
+		*d = dataset.DefaultDatasets
 		return nil
 	}
 
@@ -96,7 +96,7 @@ func main() {
 
 	if listFlag {
 		fmt.Println("Available datasets:")
-		for _, ds := range dataset.Datasets {
+		for _, ds := range dataset.DefaultDatasets {
 			fmt.Printf("%s - %s\n", strings.ToLower(ds.Id()), ds.ToString())
 		}
 		os.Exit(0)
@@ -138,7 +138,11 @@ func main() {
 		downloadDirectory := getDownloadDirectory(outputDirFlag, extractFlag)
 		filepath := filepath.Join(downloadDirectory, ds.ToFilename(date))
 		fmt.Printf("Downloading %s...\n", ds.ToString())
-		downloader.DownloadDataset(ds, filepath)
+		err := downloader.DownloadDataset(ds, filepath)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 
 		if extractFlag {
 			fmt.Printf("Extracting %s...\n", ds.ToFilename(date))
