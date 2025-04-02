@@ -2,11 +2,11 @@ default: build
 
 build-downloader:
 	@echo "Building downloader..."
-	go build -o bin/teryt-downloader cmd/downloader/main.go
+	go build -o build/teryt-downloader cmd/downloader/main.go
 
 build-exporter:
 	@echo "Building exporter..."
-	go build -o bin/teryt-exporter cmd/exporter/main.go
+	go build -o build/teryt-exporter cmd/exporter/main.go
 
 build: build-downloader build-exporter
 
@@ -16,4 +16,4 @@ test:
 
 clean:
 	@echo "Cleaning..."
-	rm -rf bin
+	rm -rf build
