@@ -12,7 +12,7 @@ build: build-downloader build-exporter
 
 test:
 	@echo "Running tests..."
-	go test -v .\internal\dataset\
+	go test -v .\tests\...
 
 clean:
 	@echo "Cleaning..."

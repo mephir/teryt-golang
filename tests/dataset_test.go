@@ -1,7 +1,9 @@
-package dataset
+package tests
 
 import (
 	"testing"
+
+	"github.com/mephir/teryt-golang/internal/dataset"
 )
 
 func TestDataset_Validate(t *testing.T) {
@@ -22,7 +24,7 @@ func TestDataset_Validate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			d := &Dataset{
+			d := &dataset.Dataset{
 				Name:    tt.fields.Name,
 				Variant: tt.fields.Variant,
 			}
@@ -48,7 +50,7 @@ func TestDataset_ToTarget(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			d := &Dataset{
+			d := &dataset.Dataset{
 				Name:    tt.fields.Name,
 				Variant: tt.fields.Variant,
 			}

@@ -1,4 +1,4 @@
-package parser_tests
+package tests
 
 import (
 	"path/filepath"

@@ -1,4 +1,4 @@
-package dataset
+package tests
 
 import (
 	"encoding/xml"
@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 	"time"
+
+	"github.com/mephir/teryt-golang/internal/dataset"
 )
 
 type fields struct {
@@ -15,7 +17,7 @@ type fields struct {
 }
 
 func TestClassifier_Determine(t *testing.T) {
-	var basePath, err = filepath.Abs("../../tests/data")
+	var sourcePath, err = filepath.Abs("./data")
 	if err != nil {
 		t.Fatalf("could not determine absolute path: %v", err)
 	}
@@ -26,16 +28,16 @@ func TestClassifier_Determine(t *testing.T) {
 		wantErr bool
 		path    string
 	}{
-		{"Empty file", fields{Name: "", Variant: "", Date: time.Time{}}, true, filepath.Join(basePath, "empty.xml")},
-		{"SIMC Adresowy", fields{Name: "SIMC", Variant: "A", Date: time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC)}, false, filepath.Join(basePath, "SIMC_Adresowy_2025-04-01.xml")},
-		{"SIMC Statystyczny", fields{Name: "SIMC", Variant: "S", Date: time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC)}, false, filepath.Join(basePath, "SIMC_Statystyczny_2025-04-01.xml")},
-		{"WMRODZ", fields{Name: "WMRODZ", Variant: "", Date: time.Date(2013, time.February, 28, 0, 0, 0, 0, time.UTC)}, false, filepath.Join(basePath, "WMRODZ_2025-04-01.xml")},
-		{"WMRODZ non default name", fields{Name: "WMRODZ", Variant: "", Date: time.Date(2013, time.February, 28, 0, 0, 0, 0, time.UTC)}, false, filepath.Join(basePath, "wmrodz_without_proper_name.xml")},
+		{"Empty file", fields{Name: "", Variant: "", Date: time.Time{}}, true, filepath.Join(sourcePath, "empty.xml")},
+		{"SIMC Adresowy", fields{Name: "SIMC", Variant: "A", Date: time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC)}, false, filepath.Join(sourcePath, "SIMC_Adresowy_2025-04-01.xml")},
+		{"SIMC Statystyczny", fields{Name: "SIMC", Variant: "S", Date: time.Date(2025, time.January, 1, 0, 0, 0, 0, time.UTC)}, false, filepath.Join(sourcePath, "SIMC_Statystyczny_2025-04-01.xml")},
+		{"WMRODZ", fields{Name: "WMRODZ", Variant: "", Date: time.Date(2013, time.February, 28, 0, 0, 0, 0, time.UTC)}, false, filepath.Join(sourcePath, "WMRODZ_2025-04-01.xml")},
+		{"WMRODZ non default name", fields{Name: "WMRODZ", Variant: "", Date: time.Date(2013, time.February, 28, 0, 0, 0, 0, time.UTC)}, false, filepath.Join(sourcePath, "wmrodz_without_proper_name.xml")},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Determine(tt.path)
+			got, err := dataset.Determine(tt.path)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Classifier.DetermineByContent() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -73,7 +75,7 @@ func TestClassifier_DetermineByFilename(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := DetermineByFilename(tt.filename)
+			got, err := dataset.DetermineByFilename(tt.filename)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Classifier.DetermineByContent() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -93,7 +95,7 @@ func TestClassifier_DetermineByFilename(t *testing.T) {
 }
 
 func TestClassifier_DetermineByContent(t *testing.T) {
-	var basePath, err = filepath.Abs("../../tests/data")
+	var basePath, err = filepath.Abs("./data")
 	if err != nil {
 		t.Fatalf("could not determine absolute path: %v", err)
 	}
@@ -124,7 +126,7 @@ func TestClassifier_DetermineByContent(t *testing.T) {
 			defer fh.Close()
 
 			reader := xml.NewDecoder(fh)
-			got, err := DetermineByContent(reader)
+			got, err := dataset.DetermineByContent(reader)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Classifier.DetermineByContent() error = %v, wantErr %v", err, tt.wantErr)
 				return
