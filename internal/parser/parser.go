@@ -8,7 +8,7 @@ import (
 	"reflect"
 
 	"github.com/mephir/teryt-golang/internal/dataset"
-	"github.com/mephir/teryt-golang/internal/parser/xmlstructs"
+	"github.com/mephir/teryt-golang/internal/dataset/datastruct"
 )
 
 type Parser interface {
@@ -39,16 +39,16 @@ func Open(path string) (*XmlParser, error) {
 	switch dataset.Name {
 	case "SIMC":
 		if dataset.Variant == "S" {
-			structType = reflect.TypeOf(xmlstructs.SimcS{})
+			structType = reflect.TypeOf(datastruct.SimcS{})
 		} else {
-			structType = reflect.TypeOf(xmlstructs.Simc{})
+			structType = reflect.TypeOf(datastruct.Simc{})
 		}
 	case "ULIC":
-		structType = reflect.TypeOf(xmlstructs.Ulic{})
+		structType = reflect.TypeOf(datastruct.Ulic{})
 	case "TERC":
-		structType = reflect.TypeOf(xmlstructs.Terc{})
+		structType = reflect.TypeOf(datastruct.Terc{})
 	case "WMRODZ":
-		structType = reflect.TypeOf(xmlstructs.Wmrodz{})
+		structType = reflect.TypeOf(datastruct.Wmrodz{})
 	}
 
 	return &XmlParser{
@@ -63,7 +63,7 @@ func (p *XmlParser) Close() error {
 	return p.fileHandle.Close()
 }
 
-func (p *XmlParser) Fetch() (any, error) {
+func (p *XmlParser) Fetch() (datastruct.Datastruct, error) {
 	decoder := p.getDecoder()
 
 	for {
@@ -75,9 +75,9 @@ func (p *XmlParser) Fetch() (any, error) {
 		switch t := token.(type) {
 		case xml.StartElement:
 			if t.Name.Local == "row" {
-				item := reflect.New(p.structType).Interface()
+				item := reflect.New(p.structType).Interface().(datastruct.Datastruct)
 				if err := decoder.DecodeElement(&item, &t); err != nil {
-					return nil, fmt.Errorf("could not decode element: %w", err)
+					return nil, err
 				}
 
 				return item, nil

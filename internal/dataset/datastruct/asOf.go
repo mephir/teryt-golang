@@ -1,15 +1,15 @@
-package xmlstructs
+package datastruct
 
 import (
 	"encoding/xml"
 	"time"
 )
 
-type StanNa struct {
+type AsOf struct {
 	time.Time
 }
 
-func (s *StanNa) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
+func (s *AsOf) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
 	var dateString string
 	if err := decoder.DecodeElement(&dateString, &start); err != nil {
 		return err
