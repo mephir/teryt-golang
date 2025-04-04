@@ -9,13 +9,13 @@ import (
 )
 
 type Terc struct {
-	Woj      uint        `xml:"WOJ"`       // Województwo, Voivodeship
-	Pow      *uint       `xml:"POW"`       // Powiat, County
-	Gmi      *uint       `xml:"GMI"`       // Gmina, Municipality
-	Rodz     *model.Rodz `xml:"RODZ"`      // Rodzaj jednostki, Unit type
-	Name     string      `xml:"NAZWA"`     // Nazwa, Name
-	UnitType string      `xml:"NAZWA_DOD"` // Określenie jednostki, Unit determination
-	AsOf     AsOf        `xml:"STAN_NA"`   // Data aktualizacji, Update date
+	Woj      uint                    `xml:"WOJ"`       // Województwo, Voivodeship
+	Pow      *uint                   `xml:"POW"`       // Powiat, County
+	Gmi      *uint                   `xml:"GMI"`       // Gmina, Municipality
+	Rodz     *model.MunicipalityType `xml:"RODZ"`      // Rodzaj jednostki, Unit type
+	Name     string                  `xml:"NAZWA"`     // Nazwa, Name
+	UnitType string                  `xml:"NAZWA_DOD"` // Określenie jednostki, Unit determination
+	AsOf     AsOf                    `xml:"STAN_NA"`   // Data aktualizacji, Update date
 }
 
 func (t *Terc) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -59,7 +59,7 @@ func (t *Terc) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 }
 
 func (t Terc) ToModel() (model.Model, error) {
-	if t.Pow == nil {
+	if t.IsVoivodeship() {
 		return &model.Voivodeship{
 			Id:       t.Woj,
 			Name:     strings.ToLower(t.Name),
@@ -68,7 +68,7 @@ func (t Terc) ToModel() (model.Model, error) {
 		}, nil
 	}
 
-	if t.Gmi == nil {
+	if t.IsCounty() {
 		return &model.County{
 			Id:            *t.Pow,
 			Name:          t.Name,
@@ -87,5 +87,16 @@ func (t Terc) ToModel() (model.Model, error) {
 		CountyId:      *t.Pow,
 		VoivodeshipId: t.Woj,
 	}, nil
+}
 
+func (t Terc) IsVoivodeship() bool {
+	return t.Pow == nil && t.Gmi == nil
+}
+
+func (t Terc) IsCounty() bool {
+	return t.Pow != nil && t.Gmi == nil
+}
+
+func (t Terc) IsMunicipality() bool {
+	return t.Pow != nil && t.Gmi != nil
 }

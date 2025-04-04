@@ -12,7 +12,7 @@ type Municipality struct { // Gmina
 	Name          string
 	UnitType      string
 	AsOf          time.Time
-	Type          Rodz
+	Type          MunicipalityType
 	CountyId      uint
 	County        *County
 	VoivodeshipId uint
@@ -28,4 +28,8 @@ func (m Municipality) ToString() string {
 
 func (m Municipality) Uuid() uuid.UUID {
 	return uuid.NewSHA1(m.County.Uuid(), []byte(m.ToString()))
+}
+
+func (m Municipality) TerytId() string {
+	return fmt.Sprintf("%02d%02d%02d%01d", m.VoivodeshipId, m.CountyId, m.Id, m.Type.Id)
 }

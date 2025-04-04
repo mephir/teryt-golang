@@ -28,3 +28,7 @@ func (c County) Uuid() uuid.UUID {
 func (c County) ToString() string {
 	return fmt.Sprintf("%s %s", c.UnitType, c.Name)
 }
+
+func (c County) TerytId() string {
+	return fmt.Sprintf("%02d%02d", c.VoivodeshipId, c.Id)
+}

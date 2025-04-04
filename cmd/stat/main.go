@@ -7,10 +7,10 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/mephir/teryt-golang/internal/collection"
 	"github.com/mephir/teryt-golang/internal/dataset/datastruct"
 	"github.com/mephir/teryt-golang/internal/dataset/model"
 	"github.com/mephir/teryt-golang/internal/parser"
+	"github.com/mephir/teryt-golang/internal/teryt"
 )
 
 func main() {
@@ -19,14 +19,13 @@ func main() {
 		panic(err)
 	}
 
+	teryt := teryt.NewInstance()
+
 	parser, err := parser.Open(path)
 	if err != nil {
 		panic(err)
 	}
 	defer parser.Close()
-	voivodeships := collection.NewCollection[model.Voivodeship]()
-	counties := collection.NewCollection[model.County]()
-	municipalisties := collection.NewCollection[model.Municipality]()
 
 	orphanedCounties := make(map[uint][]*model.County)
 	orphanedMunicipalities := make(map[uint][]*model.Municipality)
@@ -42,9 +41,9 @@ func main() {
 	municipalitiesChan := make(chan *model.Municipality)
 
 	wg.Add(3)
-	go processVoivodeships(voivodeshipsChan, orphanedCounties, &wg, mutexes, voivodeships)
-	go processCounties(countiesChan, voivodeships, orphanedCounties, &wg, mutexes, counties, orphanedMunicipalities)
-	go processMunicipalities(municipalitiesChan, counties, orphanedMunicipalities, &wg, mutexes, municipalisties)
+	go processVoivodeships(teryt, voivodeshipsChan, &wg, mutexes, orphanedCounties)
+	go processCounties(teryt, countiesChan, &wg, mutexes, orphanedCounties, orphanedMunicipalities)
+	go processMunicipalities(teryt, municipalitiesChan, &wg, mutexes, orphanedMunicipalities)
 
 	// // handle parsing
 	for {
@@ -72,9 +71,6 @@ func main() {
 		case *model.County:
 			countiesChan <- m
 		case *model.Municipality:
-			// if m.Type.Id >= 5 { // prawdziwe gminy w ludzkiej glowie
-			// 	continue
-			// }
 			municipalitiesChan <- m
 		}
 	}
@@ -84,36 +80,35 @@ func main() {
 	close(municipalitiesChan)
 	wg.Wait()
 
-	total := voivodeships.Count() + counties.Count() + municipalisties.Count()
+	total := teryt.Voivodeships.Count() + teryt.Counties.Count() + teryt.Municipalities.Count()
 
 	fmt.Printf("Total: %d\n", total)
-	fmt.Printf("Voivodeships: %d\n", voivodeships.Count())
-	fmt.Printf("Counties: %d\n", counties.Count())
-	fmt.Printf("Municipalities: %d\n", municipalisties.Count())
+	fmt.Printf("Voivodeships: %d\n", teryt.Voivodeships.Count())
+	fmt.Printf("Counties: %d\n", teryt.Counties.Count())
+	fmt.Printf("Municipalities: %d\n", teryt.Municipalities.Count())
 
-	for _, v := range voivodeships.Items {
+	for v := range teryt.Voivodeships.Iterator() {
 		fmt.Printf("%s %s\n", v.UnitType, v.Name)
-		for _, c := range v.Counties {
-			fmt.Printf("\t%s %s\n", c.UnitType, c.Name)
-			for _, m := range c.Municipalities {
-				fmt.Printf("\t\t%s %s\n", m.UnitType, m.Name)
-			}
-		}
+		// for _, c := range v.Counties {
+		// 	fmt.Printf("\t%s %s\n", c.UnitType, c.Name)
+		// 	for _, m := range c.Municipalities {
+		// 		fmt.Printf("\t\t%s %s\n", m.UnitType, m.Name)
+		// 	}
+		// }
 	}
 }
 
 func processVoivodeships(
+	teryt *teryt.Teryt,
 	voivodeshipsChan chan *model.Voivodeship,
-	orphanedCounties map[uint][]*model.County,
 	wg *sync.WaitGroup,
 	mutexes map[string]*sync.Mutex,
-	voivodeships *collection.Collection[model.Voivodeship],
+	orphanedCounties map[uint][]*model.County,
 ) {
 	defer wg.Done()
 
 	for v := range voivodeshipsChan {
-		voivodeships.Add(v)
-
+		teryt.Voivodeships.Add(v)
 		mutexes["counties"].Lock()
 		if cs, exists := orphanedCounties[v.Identifier()]; exists {
 			v.Counties = append(v.Counties, cs...)
@@ -129,19 +124,18 @@ func processVoivodeships(
 }
 
 func processCounties(
+	teryt *teryt.Teryt,
 	countiesChan chan *model.County,
-	voivodeships *collection.Collection[model.Voivodeship],
-	orphanedCounties map[uint][]*model.County,
 	wg *sync.WaitGroup,
 	mutexes map[string]*sync.Mutex,
-	counties *collection.Collection[model.County],
+	orphanedCounties map[uint][]*model.County,
 	orphanedMunicipalities map[uint][]*model.Municipality,
 ) {
 	defer wg.Done()
 
 	for c := range countiesChan {
-		counties.Add(c)
-		if v := voivodeships.Get(c.VoivodeshipId); v != nil {
+		teryt.Counties.Add(c)
+		if v := teryt.Voivodeships.Get(c.VoivodeshipId); v != nil {
 			v.Counties = append(v.Counties, c)
 			c.Voivodeship = v
 		} else {
@@ -165,18 +159,17 @@ func processCounties(
 }
 
 func processMunicipalities(
+	teryt *teryt.Teryt,
 	municipalitiesChan chan *model.Municipality,
-	counties *collection.Collection[model.County],
-	orphanedMunicipalities map[uint][]*model.Municipality,
 	wg *sync.WaitGroup,
 	mutexes map[string]*sync.Mutex,
-	municipalisties *collection.Collection[model.Municipality],
+	orphanedMunicipalities map[uint][]*model.Municipality,
 ) {
 	defer wg.Done()
 
 	for m := range municipalitiesChan {
-		municipalisties.Add(m)
-		if c := counties.Get(m.CountyId + 100*m.VoivodeshipId); c != nil {
+		teryt.Municipalities.Add(m)
+		if c := teryt.Counties.Get(m.CountyId + 100*m.VoivodeshipId); c != nil {
 			c.Municipalities = append(c.Municipalities, m)
 			m.County = c
 		} else {

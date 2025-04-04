@@ -3,37 +3,41 @@ package collection
 import (
 	"fmt"
 	"sync"
-
-	"github.com/mephir/teryt-golang/internal/dataset/model"
 )
 
-type Collection[M model.Model] struct {
-	Items map[uint]*M
+type Collectable interface {
+	Identifier() uint
+}
+
+type Collection[C Collectable] struct {
+	Items map[uint]*C
 	mu    sync.RWMutex
 }
 
-func NewCollection[M model.Model]() *Collection[M] {
-	return &Collection[M]{Items: make(map[uint]*M)}
+func NewCollection[C Collectable]() *Collection[C] {
+	return &Collection[C]{Items: make(map[uint]*C)}
 }
 
-func (c *Collection[M]) Add(item *M) error {
+func (c *Collection[C]) Add(items ...*C) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	if item == nil {
-		return fmt.Errorf("item cannot be nil")
-	}
+	for _, item := range items {
+		if item == nil {
+			return fmt.Errorf("item cannot be nil")
+		}
 
-	if _, exists := c.Items[(*item).Identifier()]; exists {
-		return fmt.Errorf("item with id %d already exists", (*item).Identifier())
-	}
+		if _, exists := c.Items[(*item).Identifier()]; exists {
+			return fmt.Errorf("item with id %d already exists", (*item).Identifier())
+		}
 
-	c.Items[(*item).Identifier()] = item
+		c.Items[(*item).Identifier()] = item
+	}
 
 	return nil
 }
 
-func (c *Collection[M]) Get(id uint) *M {
+func (c *Collection[C]) Get(id uint) *C {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 
@@ -44,17 +48,17 @@ func (c *Collection[M]) Get(id uint) *M {
 	return nil
 }
 
-func (c *Collection[M]) Remove(id uint) {
+func (c *Collection[C]) Remove(id uint) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	delete(c.Items, id)
 }
 
-func (c *Collection[M]) All() []*M {
+func (c *Collection[C]) All() []*C {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 
-	items := make([]*M, 0, len(c.Items))
+	items := make([]*C, 0, len(c.Items))
 	for _, item := range c.Items {
 		items = append(items, item)
 	}
@@ -62,24 +66,39 @@ func (c *Collection[M]) All() []*M {
 	return items
 }
 
-func (c *Collection[M]) Count() int {
+func (c *Collection[C]) Count() int {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 
 	return len(c.Items)
 }
 
-func (c *Collection[M]) Clear() {
+func (c *Collection[C]) Clear() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	c.Items = make(map[uint]*M)
+	c.Items = make(map[uint]*C)
 }
 
-func (c *Collection[M]) Contains(id uint) bool {
+func (c *Collection[C]) Contains(id uint) bool {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
 
 	_, exists := c.Items[id]
 	return exists
+}
+
+func (c *Collection[C]) Iterator() <-chan *C {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+
+	ch := make(chan *C)
+	go func() {
+		defer close(ch)
+		for _, item := range c.Items {
+			ch <- item
+		}
+	}()
+
+	return ch
 }

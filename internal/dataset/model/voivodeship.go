@@ -26,3 +26,7 @@ func (v Voivodeship) Uuid() uuid.UUID {
 func (v Voivodeship) ToString() string {
 	return fmt.Sprintf("%s %s", v.UnitType, v.Name)
 }
+
+func (v Voivodeship) TerytId() string {
+	return fmt.Sprintf("%02d", v.Id)
+}

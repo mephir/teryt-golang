@@ -8,4 +8,5 @@ type Model interface {
 	Identifier() uint
 	Uuid() uuid.UUID
 	ToString() string
+	TerytId() string
 }
