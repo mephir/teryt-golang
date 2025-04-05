@@ -57,7 +57,7 @@ func (v *viewstate) Fetch() error {
 }
 
 func tbdate(date time.Time) string {
-	// those data has to be in polish unfortunately(in proper grammatical case), since those are names ofmonths i decided to hard code them instead using some library
+	// those data has to be in polish unfortunately(in proper grammatical case), since those are names of months i decided to hard code them instead using some library
 	months := map[int]string{
 		1:  "stycznia",
 		2:  "lutego",

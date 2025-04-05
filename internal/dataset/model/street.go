@@ -40,5 +40,5 @@ func (s Street) ToString() string {
 }
 
 func (s Street) TerytId() string {
-	return fmt.Sprintf("%05d", s.Id)
+	return fmt.Sprintf("%07d%05d", s.LocalityId, s.Id)
 }
