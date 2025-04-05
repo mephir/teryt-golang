@@ -8,10 +8,10 @@ type Wmrodz struct {
 	UpdatedAt AsOf   `xml:"STAN_NA"` // Data aktualizacji, Update date
 }
 
-func (w Wmrodz) ToModel() model.LocalityType {
-	return model.LocalityType{
+func (w Wmrodz) ToModel() (model.Model, error) {
+	return &model.LocalityType{
 		Id:        w.Id,
 		Name:      w.Name,
 		UpdatedAt: w.UpdatedAt.Time,
-	}
+	}, nil
 }

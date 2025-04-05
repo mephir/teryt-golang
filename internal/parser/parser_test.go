@@ -1,20 +1,29 @@
-package tests
+package parser
 
 import (
+	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
 
 	"github.com/mephir/teryt-golang/internal/dataset/datastruct"
-	"github.com/mephir/teryt-golang/internal/parser"
 )
 
-func TestParser_Fetch(t *testing.T) {
-	var sourcePath, err = filepath.Abs("./data")
-	if err != nil {
-		t.Fatalf("could not determine absolute path: %v", err)
-	}
+var sourcePath string
 
+func TestMain(m *testing.M) {
+	source, err := filepath.Abs("./data")
+	if err != nil {
+		panic(err)
+	}
+	sourcePath = source
+
+	code := m.Run()
+
+	os.Exit(code)
+}
+
+func TestParser_Fetch(t *testing.T) {
 	tests := []struct {
 		name     string
 		filename string
@@ -31,7 +40,7 @@ func TestParser_Fetch(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			parser, err := parser.Open(tt.filename)
+			parser, err := Open(tt.filename)
 			if err != nil {
 				t.Fatalf("could not create parser: %v", err)
 				return
@@ -51,11 +60,6 @@ func TestParser_Fetch(t *testing.T) {
 }
 
 func TestParser_FetchAll(t *testing.T) {
-	var sourcePath, err = filepath.Abs("./data")
-	if err != nil {
-		t.Fatalf("could not determine absolute path: %v", err)
-	}
-
 	tests := []struct {
 		name       string
 		filename   string
@@ -73,7 +77,7 @@ func TestParser_FetchAll(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			parser, err := parser.Open(tt.filename)
+			parser, err := Open(tt.filename)
 			if err != nil {
 				t.Fatalf("could not create parser: %v", err)
 				return
@@ -94,5 +98,4 @@ func TestParser_FetchAll(t *testing.T) {
 			}
 		})
 	}
-
 }

@@ -12,16 +12,18 @@ import (
 )
 
 type Parser interface {
-	Close()
-	Fetch() (any, error)
-	FetchAll() (any, error)
+	Close() error
+	Fetch() (datastruct.Datastruct, error)
+	FetchAll() ([]datastruct.Datastruct, error)
+	GetDataset() *dataset.Dataset
 }
 
 type XmlParser struct {
+	Dataset dataset.Dataset
+
 	decoder    *xml.Decoder
 	fileHandle *os.File
 	structType reflect.Type
-	Dataset    dataset.Dataset
 }
 
 func Open(path string) (*XmlParser, error) {
@@ -52,10 +54,10 @@ func Open(path string) (*XmlParser, error) {
 	}
 
 	return &XmlParser{
+		Dataset:    *dataset,
 		decoder:    nil,
 		fileHandle: fh,
 		structType: structType,
-		Dataset:    *dataset,
 	}, nil
 }
 
@@ -86,8 +88,8 @@ func (p *XmlParser) Fetch() (datastruct.Datastruct, error) {
 	}
 }
 
-func (p *XmlParser) FetchAll() ([]any, error) {
-	var result []any
+func (p *XmlParser) FetchAll() ([]datastruct.Datastruct, error) {
+	var result []datastruct.Datastruct
 	decoder := p.newDecoder()
 
 	for {
@@ -102,7 +104,7 @@ func (p *XmlParser) FetchAll() ([]any, error) {
 		switch t := token.(type) {
 		case xml.StartElement:
 			if t.Name.Local == "row" {
-				item := reflect.New(p.structType).Interface()
+				item := reflect.New(p.structType).Interface().(datastruct.Datastruct)
 				if err := decoder.DecodeElement(&item, &t); err != nil {
 					return nil, fmt.Errorf("could not decode element: %w", err)
 				}
@@ -125,4 +127,8 @@ func (p *XmlParser) getDecoder() *xml.Decoder {
 
 func (p *XmlParser) newDecoder() *xml.Decoder {
 	return xml.NewDecoder(p.fileHandle)
+}
+
+func (p *XmlParser) GetDataset() *dataset.Dataset {
+	return &p.Dataset
 }

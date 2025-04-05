@@ -16,6 +16,7 @@ type Municipality struct { // Gmina
 	CountyId      uint
 	County        *County
 	VoivodeshipId uint
+	Localities    []*Locality
 }
 
 func (m Municipality) Identifier() uint {
@@ -32,4 +33,12 @@ func (m Municipality) Uuid() uuid.UUID {
 
 func (m Municipality) TerytId() string {
 	return fmt.Sprintf("%02d%02d%02d%01d", m.VoivodeshipId, m.CountyId, m.Id, m.Type.Id)
+}
+
+func (m Municipality) GetCountyIdentifier() uint {
+	if m.County == nil {
+		return m.VoivodeshipId*100 + m.CountyId
+	}
+
+	return m.County.Identifier()
 }
