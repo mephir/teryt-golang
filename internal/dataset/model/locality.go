@@ -20,7 +20,7 @@ type Locality struct {
 }
 
 func (l Locality) Identifier() uint {
-	return l.Type.Id
+	return l.Id
 }
 
 func (l Locality) ToString() string {

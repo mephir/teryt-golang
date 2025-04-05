@@ -16,6 +16,7 @@ type Parser interface {
 	Fetch() (datastruct.Datastruct, error)
 	FetchAll() ([]datastruct.Datastruct, error)
 	GetDataset() *dataset.Dataset
+	GetStructType() reflect.Type
 }
 
 type XmlParser struct {
@@ -131,4 +132,8 @@ func (p *XmlParser) newDecoder() *xml.Decoder {
 
 func (p *XmlParser) GetDataset() *dataset.Dataset {
 	return &p.Dataset
+}
+
+func (p *XmlParser) GetStructType() reflect.Type {
+	return p.structType
 }
