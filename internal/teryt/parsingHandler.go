@@ -76,7 +76,9 @@ func (p *parsingHandler) simcProcessChannel(channel <-chan *datastruct.Simc) {
 		} else {
 			switch m := m.(type) {
 			case *model.Locality:
-				p.teryt.Localities.Add(m)
+				if err := p.teryt.Localities.Add(m); err != nil {
+					panic(fmt.Errorf("could not add locality to collection: %w", err))
+				}
 			default:
 				panic(fmt.Errorf("invalid type: %T", m))
 			}
@@ -93,7 +95,9 @@ func (p *parsingHandler) wmrodzProcessChannel(channel <-chan *datastruct.Wmrodz)
 		} else {
 			switch m := m.(type) {
 			case *model.LocalityType:
-				p.teryt.LocalityTypes.Add(m)
+				if err := p.teryt.LocalityTypes.Add(m); err != nil {
+					panic(fmt.Errorf("could not add locality type to collection: %w", err))
+				}
 			default:
 				panic(fmt.Errorf("invalid type: %T", m))
 			}
@@ -108,15 +112,20 @@ func (p *parsingHandler) tercProcessChannel(channel <-chan *datastruct.Terc) {
 		if m, err := data.ToModel(); err != nil {
 			panic(fmt.Errorf("could not convert data to model: %w", err))
 		} else {
+			var err error
 			switch m := m.(type) {
 			case *model.Voivodeship:
-				p.teryt.Voivodeships.Add(m)
+				err = p.teryt.Voivodeships.Add(m)
 			case *model.County:
-				p.teryt.Counties.Add(m)
+				err = p.teryt.Counties.Add(m)
 			case *model.Municipality:
-				p.teryt.Municipalities.Add(m)
+				err = p.teryt.Municipalities.Add(m)
 			default:
 				panic(fmt.Errorf("invalid type: %T", m))
+			}
+
+			if err != nil {
+				panic(fmt.Errorf("could not add terc data to collection: %w", err))
 			}
 		}
 	}
