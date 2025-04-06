@@ -56,26 +56,6 @@ func (t *Teryt) LoadFromFiles(paths ...string) error {
 	return nil
 }
 
-// func (t *Teryt) handleParsing(h *parsingHandler, p parser.Parser) error {
-// 	if p == nil {
-// 		return fmt.Errorf("parser is nil")
-// 	}
-// 	switch p.GetDataset().Name {
-// 	case "TERC":
-// 		h.parseTerc(p)
-// 	case "WMRODZ":
-// 		h.parseWmrodz(p)
-// 	case "SIMC":
-// 		h.parseSimc(p)
-// 	case "ULIC":
-// 		h.parseUlic(p)
-// 	default:
-// 		return fmt.Errorf("unknown dataset: %s", p.GetDataset().Name)
-// 	}
-
-// 	return nil
-// }
-
 func validateParserSet(parsers *[]parser.Parser) error {
 	exists := make(map[string]bool)
 
