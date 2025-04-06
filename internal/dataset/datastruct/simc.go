@@ -17,13 +17,16 @@ type Simc struct {
 
 func (s Simc) ToModel() (model.Model, error) {
 	return &model.Locality{
-		Id:               s.Sym,
-		TypeId:           s.Rm,
-		CommonName:       s.Mz,
-		Name:             s.Name,
-		ParentLocalityId: s.Sympod,
-		MunicipalityId:   s.GetMunicipalityIdentifier(),
-		AsOf:             s.AsOf.Time,
+		VoivodeshipId:      s.Woj,
+		CountyId:           s.Pow,
+		MunicipalityId:     s.Gmi,
+		MunicipalityTypeId: s.Rodz.Id,
+		Id:                 s.Sym,
+		ParentLocalityId:   s.Sympod,
+		TypeId:             s.Rm,
+		CommonName:         s.Mz,
+		Name:               s.Name,
+		AsOf:               s.AsOf.Time,
 	}, nil
 }
 

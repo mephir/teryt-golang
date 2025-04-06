@@ -28,6 +28,7 @@ This project is in the early development phase. The initial focus is on implemen
 - [X] Implement automated TERYT data retrieval
 - [X] Develop parsing logic for XML formats
 - [ ] Develop parsing logic for CSV formats(maybe one day ;)
+- [X] Add UUID V8 generation, following hierarchy of teritorial division
 - [ ] Support multiple data export formats (JSON, SQL, CSV etc)
 - [ ] Implement basic database import functionality
 - [ ] Design and prototype vector search algorithms

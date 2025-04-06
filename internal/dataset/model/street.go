@@ -6,15 +6,20 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	terytUuid "github.com/mephir/teryt-golang/internal/uuid"
 )
 
 type Street struct {
-	Id           uint
-	LocalityId   uint
-	SortableName string
-	NamePrefix   string
-	Type         string
-	AsOf         time.Time
+	VoivodeshipId      uint
+	CountyId           uint
+	MunicipalityId     uint
+	MunicipalityTypeId uint
+	LocalityId         uint
+	Id                 uint
+	SortableName       string
+	NamePrefix         string
+	Type               string
+	AsOf               time.Time
 }
 
 func (s Street) Identifier() uint {
@@ -22,7 +27,22 @@ func (s Street) Identifier() uint {
 }
 
 func (s Street) Uuid() uuid.UUID {
-	return uuid.New()
+	data := terytUuid.UuidData{
+		VoivodeshipId:      uint8(s.VoivodeshipId),
+		CountyId:           uint8(s.CountyId),
+		MunicipalityId:     uint8(s.MunicipalityId),
+		MunicipalityTypeId: uint8(s.MunicipalityTypeId),
+		LocalityId:         func() *uint32 { id := uint32(s.LocalityId); return &id }(),
+		StreetId:           func() *uint32 { id := uint32(s.Id); return &id }(),
+		AsOf:               s.AsOf,
+		Name:               s.ToString(),
+	}
+
+	id, err := data.Encode()
+	if err != nil {
+		panic(fmt.Sprintf("failed to encode UUID: %v", err))
+	}
+	return id
 }
 
 func (s Street) ToString() string {

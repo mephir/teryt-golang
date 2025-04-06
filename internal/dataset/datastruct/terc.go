@@ -70,22 +70,22 @@ func (t Terc) ToModel() (model.Model, error) {
 
 	if t.IsCounty() {
 		return &model.County{
+			VoivodeshipId: t.Woj,
 			Id:            *t.Pow,
 			Name:          t.Name,
 			UnitType:      t.UnitType,
 			AsOf:          t.AsOf.Time,
-			VoivodeshipId: t.Woj,
 		}, nil
 	}
 
 	return &model.Municipality{
+		VoivodeshipId: t.Woj,
+		CountyId:      *t.Pow,
 		Id:            *t.Gmi,
 		Name:          t.Name,
 		UnitType:      t.UnitType,
 		AsOf:          t.AsOf.Time,
 		Type:          *t.Rodz,
-		CountyId:      *t.Pow,
-		VoivodeshipId: t.Woj,
 	}, nil
 }
 

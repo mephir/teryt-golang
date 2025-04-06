@@ -5,18 +5,17 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	terytUuid "github.com/mephir/teryt-golang/internal/uuid"
 )
 
-type Municipality struct { // Gmina
+type Municipality struct {
+	VoivodeshipId uint
+	CountyId      uint
 	Id            uint
 	Name          string
 	UnitType      string
 	AsOf          time.Time
 	Type          MunicipalityType
-	CountyId      uint
-	County        *County
-	VoivodeshipId uint
-	Localities    []*Locality
 }
 
 func (m Municipality) Identifier() uint {
@@ -28,7 +27,21 @@ func (m Municipality) ToString() string {
 }
 
 func (m Municipality) Uuid() uuid.UUID {
-	return uuid.NewSHA1(m.County.Uuid(), []byte(m.ToString()))
+	data := terytUuid.UuidData{
+		VoivodeshipId:      uint8(m.VoivodeshipId),
+		CountyId:           uint8(m.CountyId),
+		MunicipalityId:     uint8(m.Id),
+		MunicipalityTypeId: uint8(m.Type.Id),
+		AsOf:               m.AsOf,
+		Name:               m.ToString(),
+	}
+
+	id, err := data.Encode()
+	if err != nil {
+		panic(fmt.Sprintf("failed to encode UUID: %v", err))
+	}
+
+	return id
 }
 
 func (m Municipality) TerytId() string {
@@ -36,9 +49,5 @@ func (m Municipality) TerytId() string {
 }
 
 func (m Municipality) GetCountyIdentifier() uint {
-	if m.County == nil {
-		return m.VoivodeshipId*100 + m.CountyId
-	}
-
-	return m.County.Identifier()
+	return m.VoivodeshipId*100 + m.CountyId
 }
