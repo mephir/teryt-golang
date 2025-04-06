@@ -8,13 +8,12 @@ import (
 )
 
 type County struct { // Gmina
-	Id             uint
-	Name           string
-	UnitType       string
-	AsOf           time.Time
-	Voivodeship    *Voivodeship
-	VoivodeshipId  uint
-	Municipalities []*Municipality
+	Id            uint
+	Name          string
+	UnitType      string
+	AsOf          time.Time
+	Voivodeship   *Voivodeship
+	VoivodeshipId uint
 }
 
 func (c County) Identifier() uint {

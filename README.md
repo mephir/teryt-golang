@@ -12,7 +12,7 @@ This project is a Golang-based system for downloading, parsing, and exporting TE
 
 ## Technology Stack
 - **Golang**: Core programming language for system-level data processing.
-- **Database Support**: PostgreSQL, SQLite, or other suitable databases for structured storage.
+- **Database Support**: MySQL, PostgreSQL, SQLite, or other suitable databases for structured storage.
 - **Vector Search Development**: Custom implementation exploring different indexing and retrieval techniques.
 - **Parallel Processing**: Efficient data handling using Goroutines.
 

@@ -12,7 +12,6 @@ type Voivodeship struct { // Wojewodztwo
 	Name     string
 	UnitType string
 	AsOf     time.Time
-	Counties []*County
 }
 
 func (v Voivodeship) Identifier() uint {
