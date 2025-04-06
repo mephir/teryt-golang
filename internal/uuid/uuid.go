@@ -62,19 +62,19 @@ func (u *UuidData) Encode() (uuid.UUID, error) {
 	return id, nil
 }
 
-func shiftRight4Bits(input [21]byte) [20]byte {
-	var output [20]byte
+// func shiftRight4Bits(input [21]byte) [20]byte {
+// 	var output [20]byte
 
-	output[0] = (input[0] << 4) | (input[1] >> 4)
+// 	output[0] = (input[0] << 4) | (input[1] >> 4)
 
-	for i := 1; i < 19; i++ {
-		output[i] = (input[i] << 4) | (input[i+1] >> 4)
-	}
+// 	for i := 1; i < 19; i++ {
+// 		output[i] = (input[i] << 4) | (input[i+1] >> 4)
+// 	}
 
-	output[19] = (input[19] << 4) | (input[20] >> 4)
+// 	output[19] = (input[19] << 4) | (input[20] >> 4)
 
-	return output
-}
+// 	return output
+// }
 
 func shiftLeft4BitsKeepFirstNibble(input [20]byte) [21]byte {
 	var output [21]byte
