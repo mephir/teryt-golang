@@ -21,7 +21,7 @@ func (w LocalityType) Uuid() uuid.UUID {
 	return uuid.NewSHA1(uuid.Nil, []byte(w.Name))
 }
 
-func (w LocalityType) ToString() string {
+func (w LocalityType) String() string {
 	return w.Name
 }
 

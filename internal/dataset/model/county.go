@@ -27,7 +27,7 @@ func (c County) Uuid() uuid.UUID {
 		MunicipalityId:     0,
 		MunicipalityTypeId: 0,
 		AsOf:               c.AsOf,
-		Name:               c.ToString(),
+		Name:               c.String(),
 	}
 
 	id, err := data.Encode()
@@ -38,7 +38,7 @@ func (c County) Uuid() uuid.UUID {
 	return id
 }
 
-func (c County) ToString() string {
+func (c County) String() string {
 	return fmt.Sprintf("%s %s", c.UnitType, c.Name)
 }
 

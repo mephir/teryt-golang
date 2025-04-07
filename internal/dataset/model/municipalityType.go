@@ -21,7 +21,7 @@ func (r MunicipalityType) Uuid() uuid.UUID {
 	return uuid.NewSHA1(uuid.Nil, []byte(r.Name))
 }
 
-func (r MunicipalityType) ToString() string {
+func (r MunicipalityType) String() string {
 	return r.Name
 }
 

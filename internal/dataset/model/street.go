@@ -35,7 +35,7 @@ func (s Street) Uuid() uuid.UUID {
 		LocalityId:         func() *uint32 { id := uint32(s.LocalityId); return &id }(),
 		StreetId:           func() *uint32 { id := uint32(s.Id); return &id }(),
 		AsOf:               s.AsOf,
-		Name:               s.ToString(),
+		Name:               s.String(),
 	}
 
 	id, err := data.Encode()
@@ -45,7 +45,7 @@ func (s Street) Uuid() uuid.UUID {
 	return id
 }
 
-func (s Street) ToString() string {
+func (s Street) String() string {
 	var parts []string
 
 	if s.Type != "" {

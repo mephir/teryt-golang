@@ -26,7 +26,7 @@ func (v Voivodeship) Uuid() uuid.UUID {
 		MunicipalityId:     0,
 		MunicipalityTypeId: 0,
 		AsOf:               v.AsOf,
-		Name:               v.ToString(),
+		Name:               v.String(),
 	}
 
 	id, err := data.Encode()
@@ -37,7 +37,7 @@ func (v Voivodeship) Uuid() uuid.UUID {
 	return id
 }
 
-func (v Voivodeship) ToString() string {
+func (v Voivodeship) String() string {
 	return fmt.Sprintf("%s %s", v.UnitType, v.Name)
 }
 

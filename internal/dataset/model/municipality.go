@@ -22,7 +22,7 @@ func (m Municipality) Identifier() uint {
 	return m.Type.Id + m.Id*10 + m.CountyId*1000 + m.VoivodeshipId*100000
 }
 
-func (m Municipality) ToString() string {
+func (m Municipality) String() string {
 	return fmt.Sprintf("%s %s", m.UnitType, m.Name)
 }
 
@@ -33,7 +33,7 @@ func (m Municipality) Uuid() uuid.UUID {
 		MunicipalityId:     uint8(m.Id),
 		MunicipalityTypeId: uint8(m.Type.Id),
 		AsOf:               m.AsOf,
-		Name:               m.ToString(),
+		Name:               m.String(),
 	}
 
 	id, err := data.Encode()

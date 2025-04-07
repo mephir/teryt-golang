@@ -25,7 +25,7 @@ func (l Locality) Identifier() uint {
 	return l.Id
 }
 
-func (l Locality) ToString() string {
+func (l Locality) String() string {
 	return l.Name
 }
 
@@ -41,7 +41,7 @@ func (l Locality) Uuid() uuid.UUID {
 		MunicipalityTypeId: uint8(l.MunicipalityTypeId),
 		LocalityId:         func() *uint32 { id := uint32(l.Id); return &id }(),
 		AsOf:               l.AsOf,
-		Name:               l.ToString(),
+		Name:               l.String(),
 	}
 
 	id, err := data.Encode()

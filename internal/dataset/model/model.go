@@ -7,6 +7,6 @@ import (
 type Model interface {
 	Identifier() uint
 	Uuid() uuid.UUID
-	ToString() string
+	String() string
 	TerytId() string
 }
