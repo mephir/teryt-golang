@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/google/uuid"
-	"github.com/mephir/teryt-golang/internal/tree/binarytree"
+	"github.com/mephir/teryt-golang/internal/tree/avltree"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	// teryt := teryt.NewInstance()
 	// teryt.LoadFromFiles(paths...)
 
-	tree := &binarytree.BinaryTree[uuid.UUID]{}
+	tree := &avltree.AvlTree[uuid.UUID]{}
 	for range 10 {
 		tree.Insert(uuid.New())
 	}

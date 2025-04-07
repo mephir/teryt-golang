@@ -1,21 +1,21 @@
-package binarytree
+package avltree
 
 import "fmt"
 
-type BinaryTree[T any] struct {
+type AvlTree[T any] struct {
 	root *TreeNode[T]
 }
 
-func (t *BinaryTree[T]) GetRoot() *TreeNode[T] {
+func (t *AvlTree[T]) GetRoot() *TreeNode[T] {
 	return t.root
 }
-func (t *BinaryTree[T]) Insert(value T) error {
+func (t *AvlTree[T]) Insert(value T) error {
 	t.root = insertNode(t.root, value, nil)
 
 	return nil
 }
 
-func (t *BinaryTree[T]) Print(noParents bool) {
+func (t *AvlTree[T]) Print(noParents bool) {
 	if t.root != nil {
 		printNode(t.root, "", false, noParents)
 	}
@@ -38,7 +38,7 @@ func insertNode[T any](node *TreeNode[T], value T, parent *TreeNode[T]) *TreeNod
 		panic(fmt.Errorf("duplicate values are not allowed"))
 	}
 
-	node.Height = max(getHeight(node.Left), getHeight(node.Right)) + 1
+	node.Height = max(height(node.Left), height(node.Right)) + 1
 
 	return balance(node)
 }
@@ -52,8 +52,8 @@ func leftRotate[T any](x *TreeNode[T]) *TreeNode[T] {
 	y.Left = x
 	y.Parent = x.Parent
 	x.Parent = y
-	x.Height = max(getHeight(x.Left), getHeight(x.Right)) + 1
-	y.Height = max(getHeight(y.Left), getHeight(y.Right)) + 1
+	x.Height = max(height(x.Left), height(x.Right)) + 1
+	y.Height = max(height(y.Left), height(y.Right)) + 1
 	return y
 }
 
@@ -66,23 +66,23 @@ func rightRotate[T any](y *TreeNode[T]) *TreeNode[T] {
 	x.Right = y
 	x.Parent = y.Parent
 	y.Parent = x
-	y.Height = max(getHeight(y.Left), getHeight(y.Right)) + 1
-	x.Height = max(getHeight(x.Left), getHeight(x.Right)) + 1
+	y.Height = max(height(y.Left), height(y.Right)) + 1
+	x.Height = max(height(x.Left), height(x.Right)) + 1
 	return x
 }
 
 func balance[T any](node *TreeNode[T]) *TreeNode[T] {
-	balanceFactor := getBalanceFactor(node)
+	balanceFactor := calculateBalanceFactor(node)
 
 	if balanceFactor > 1 {
-		if getBalanceFactor(node.Left) < 0 {
+		if calculateBalanceFactor(node.Left) < 0 {
 			node.Left = leftRotate(node.Left) // Left-Right case
 		}
 		return rightRotate(node) // Left-Left case
 	}
 
 	if balanceFactor < -1 {
-		if getBalanceFactor(node.Right) > 0 {
+		if calculateBalanceFactor(node.Right) > 0 {
 			node.Right = rightRotate(node.Right) // Right-Left case
 		}
 		return leftRotate(node) // Right-Right case
@@ -91,23 +91,23 @@ func balance[T any](node *TreeNode[T]) *TreeNode[T] {
 	return node
 }
 
-func getHeight[T any](node *TreeNode[T]) int {
+func height[T any](node *TreeNode[T]) int {
 	if node == nil {
 		return 0
 	}
 	return node.Height
 }
 
-func getBalanceFactor[T any](node *TreeNode[T]) int {
+func calculateBalanceFactor[T any](node *TreeNode[T]) int {
 	if node == nil {
 		return 0
 	}
-	return getHeight(node.Left) - getHeight(node.Right)
+
+	return height(node.Left) - height(node.Right)
 }
 
 func printNode[T any](node *TreeNode[T], prefix string, isLeft bool, noParents bool) {
 	if node != nil {
-		// Print the current node value
 		fmt.Printf("%s", prefix)
 		if isLeft {
 			fmt.Printf("├── ")
@@ -122,10 +122,6 @@ func printNode[T any](node *TreeNode[T], prefix string, isLeft bool, noParents b
 		} else {
 			fmt.Printf("%v(%v)\n", node.Value, node.Parent.Value)
 		}
-		// Print the parent of the current node
-		// if node.Parent != nil {
-		// 	fmt.Printf("%sParent: %v\n", prefix, node.Parent.Value)
-		// }
 
 		printNode(node.Left, prefix, true, noParents)
 		printNode(node.Right, prefix, false, noParents)
