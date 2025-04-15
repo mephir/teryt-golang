@@ -61,4 +61,5 @@ func main() {
 	fmt.Printf("Localities: %d\n", teryt.Localities.Count())
 	fmt.Printf("LocalityTypes: %d\n", teryt.LocalityTypes.Count())
 	fmt.Printf("Streets: %d\n", teryt.Streets.Count())
+
 }

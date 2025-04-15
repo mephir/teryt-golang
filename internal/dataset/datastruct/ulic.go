@@ -17,11 +17,15 @@ type Ulic struct {
 
 func (u Ulic) ToModel() (model.Model, error) {
 	return &model.Street{
-		Id:           u.SymUl,
-		LocalityId:   u.Sym,
-		SortableName: u.SortableName,
-		NamePrefix:   u.NamePrefix,
-		Type:         u.Type,
-		AsOf:         u.AsOf.Time,
+		VoivodeshipId:      u.Woj,
+		CountyId:           u.Pow,
+		MunicipalityId:     u.Gmi,
+		MunicipalityTypeId: u.Rodz.Id,
+		Id:                 u.SymUl,
+		LocalityId:         u.Sym,
+		SortableName:       u.SortableName,
+		NamePrefix:         u.NamePrefix,
+		Type:               u.Type,
+		AsOf:               u.AsOf.Time,
 	}, nil
 }
